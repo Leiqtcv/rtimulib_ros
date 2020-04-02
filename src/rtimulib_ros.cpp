@@ -100,10 +100,10 @@ int main(int argc, char **argv)
             imu_msg.orientation.w = imu_data.fusionQPose.scalar();
 
             imu_msg.angular_velocity.x = imu_data.gyro.x();
-            imu_msg.angular_velocity.y = imu_data.gyro.y();
-            imu_msg.angular_velocity.z = imu_data.gyro.z();
+            imu_msg.angular_velocity.y = -imu_data.gyro.y();
+            imu_msg.angular_velocity.z = -imu_data.gyro.z();
 
-            imu_msg.linear_acceleration.x = imu_data.accel.x() * G_TO_MPSS;
+            imu_msg.linear_acceleration.x = -imu_data.accel.x() * G_TO_MPSS;
             imu_msg.linear_acceleration.y = imu_data.accel.y() * G_TO_MPSS;
             imu_msg.linear_acceleration.z = imu_data.accel.z() * G_TO_MPSS;
 
@@ -112,5 +112,7 @@ int main(int argc, char **argv)
         ros::spinOnce();
         ros::Duration(imu->IMUGetPollInterval() / 1000.0).sleep();
     }
+    delete imu;
+    delete settings;
     return 0;
 }
